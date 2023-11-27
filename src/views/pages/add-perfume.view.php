@@ -3,6 +3,7 @@
 $title = 'Add a perfume';
 $name = $data['name'] ?? null;
 $description = $data['description'] ?? null;
+$componentsOptions = $data['componentsOptions'] ?? null;
 $successMessage = $data['successMessage'] ?? null;
 $errorMessage = $data['errorMessage'] ?? null;
 
@@ -15,7 +16,6 @@ ob_start(); ?>
         <label class="form-label">Gender</label>
         <div class="input-group">
             <select class="form-select" aria-label="Gender select" name="gender" id="gender">
-                <option value="0">All</option>
                 <option value="1">Men</option>
                 <option value="2">Women</option>
             </select>
@@ -34,8 +34,9 @@ ob_start(); ?>
     <div class="mb-3">
         <label class="form-label">Components</label>
         <div class="input-group">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">TODO COMPONENTS</label>
+            <?= $componentsOptions ?>
+            <!-- <input type="checkbox" class="form-check-input" id="TODO" name="components[]" value="TODO">
+            <label class="form-check-label" for="TODO">TODO COMPONENTS</label> -->
         </div>
     </div>
 

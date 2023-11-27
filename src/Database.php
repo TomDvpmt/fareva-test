@@ -46,7 +46,8 @@ class Database
             CREATE TABLE IF NOT EXISTS perfumes (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
-                description VARCHAR(500) NOT NULL
+                description VARCHAR(500) NOT NULL,
+                gender INT NOT NULL
             );
             ",
             "
@@ -62,30 +63,37 @@ class Database
                 FOREIGN KEY (perfume_id) REFERENCES perfumes(id),
                 FOREIGN KEY (component_id) REFERENCES components(id)
             );
+            ",
+            "
+            CREATE TRIGGER IF NOT EXISTS delete_relation_before_delete_perfume
+                BEFORE DELETE 
+                ON perfumes FOR EACH ROW
+                DELETE FROM perfumes_components
+                WHERE perfume_id = old.id;
             "
         ];
 
-        /* Populate with components with mock data */
-
-        $components = [
-            'alcohol',
-            'water',
-            'limonene',
-            'citral',
-            'CI 14700 (RED)',
-            'CI 19140 (YELLOW)',
-            'polysorbate 20',
-            'sodium benzoate',
-        ];
-
-        foreach ($components as $component) {
-            $query = "INSERT INTO components (`name`) VALUES ('" . $component . "');";
-            array_push($queries, $query);
-        }
 
         foreach ($queries as $query) {
             $check = $pdo->query($query);
-            if (!$check) throw new Exception('Unable to create tables');
+            if (!$check) throw new Exception('Unable to create tables.');
         };
+
+
+        /* Populate with mock data */
+
+        foreach (MOCK_COMPONENTS as $component) {
+            $checkQuery = "
+            SELECT * FROM components WHERE name='$component';
+            ";
+            $statement = $pdo->query($checkQuery);
+            $result = $statement->fetch();
+            if ($result) {
+                continue;
+            }
+            $query = "INSERT INTO components (`name`) VALUES ('" . $component . "');";
+            $check = $pdo->query($query);
+            if (!$check) throw new Exception('Unable to populate components table.');
+        }
     }
 }

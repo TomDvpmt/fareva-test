@@ -11,6 +11,11 @@ class AbstractModel
     protected string $table;
     protected string $where;
 
+    protected function setTable(string $table): void
+    {
+        $this->table = $table;
+    }
+
     private function setWhere(array $selectors): void
     {
         $params = array_map(fn ($key) => $key . '=:' . $key, array_keys($selectors));
@@ -45,6 +50,20 @@ class AbstractModel
             if (!$check) throw new Exception('Unable to get data.');
             $results = $statement->fetchAll(PDO::FETCH_ASSOC);
             return $results;
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage()); // TODO : better error display for user
+        }
+    }
+
+    public function delete(int $id)
+    {
+        $this->setWhere(['id' => $id]);
+        $query = "DELETE FROM $this->table $this->where;";
+        try {
+            $pdo = Database::connect(true);
+            $statement = $pdo->prepare($query);
+            $check = $statement->execute(['id' => $id]);
+            if (!$check) throw new Exception('Unable to delete data.');
         } catch (Exception $e) {
             die('Error: ' . $e->getMessage()); // TODO : better error display for user
         }

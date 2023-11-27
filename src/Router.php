@@ -18,9 +18,24 @@ class Router
                 $controller->index();
                 break;
 
+            case '/perfume':
+                $controller = new PerfumeController;
+                $controller->getPerfume();
+                break;
+
             case '/add-perfume':
                 $controller = new PerfumeController;
-                $controller->index();
+                $controller->addPerfume();
+                break;
+
+                // case '/update':
+                //     $controller = new PerfumeController;
+                //     $controller->updatePerfume();
+                //     break;
+
+            case '/delete':
+                $controller = new PerfumeController;
+                $controller->deletePerfume();
                 break;
 
             default:

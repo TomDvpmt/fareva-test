@@ -10,6 +10,17 @@ define('SITE_URL', '//' . $_SERVER['HTTP_HOST']);
 define('VIEWS_DIR', str_replace('public', 'src', $_SERVER['DOCUMENT_ROOT']) . '/views/');
 define('BRAND_NAME', 'Passion of Action');
 
+define('MOCK_COMPONENTS', [
+    'alcohol',
+    'water',
+    'limonene',
+    'citral',
+    'CI 14700 (red)',
+    'CI 19140 (yellow)',
+    'polysorbate 20',
+    'sodium benzoate',
+]);
+
 /* Errors display */
 
 if (DEVELOPMENT) {
