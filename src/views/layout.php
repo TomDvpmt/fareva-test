@@ -12,7 +12,7 @@
 
 <body>
     <?php require_once VIEWS_DIR . 'partials/header.php'; ?>
-    <main>
+    <main class="container">
         <?= $content ?? null ?>
     </main>
     <?php require_once VIEWS_DIR . 'partials/footer.php'; ?>
