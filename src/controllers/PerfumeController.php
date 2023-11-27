@@ -18,9 +18,8 @@ class PerfumeController extends AbstractController
         }
 
         $id = strip_tags($_GET['id']);
-        $perfume = (new Perfume)->get(['id' => $id]);
-        // TODO
-
+        $perfume = (new Perfume)->get(['id' => $id])[0];
+        $this->view('pages/perfume', $perfume);
     }
 
     public function addPerfume(): void

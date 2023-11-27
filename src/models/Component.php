@@ -13,6 +13,12 @@ class Component extends AbstractModel
         $this->setTable('components');
     }
 
+    public function getAllComponents(): array
+    {
+        $components = $this->get();
+        return $components;
+    }
+
     public function addPerfumeComponentRelation(array $ids): void
     {
         $this->setTable('perfumes_components');

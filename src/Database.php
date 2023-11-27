@@ -82,6 +82,26 @@ class Database
 
         /* Populate with mock data */
 
+        // foreach (MOCK_PERFUMES as $perfume) {
+        //     $checkQuery = "
+        //     SELECT * FROM perfumes WHERE name='" . $perfume['name'] . "';
+        //     ";
+        //     $statement = $pdo->query($checkQuery);
+        //     $result = $statement->fetch();
+        //     if ($result) {
+        //         continue;
+        //     }
+        //     $query = "INSERT INTO perfumes (`name`, `description`) VALUES ('" . $perfume['name'] . "', '" . $perfume['description'] . "');";
+        //     $check = $pdo->query($query);
+        //     if (!$check) throw new Exception('Unable to populate components table.');
+
+        //     foreach ($perfume['components'] as $component) {
+        //         $query = "INSERT INTO perfumes_components (`perfume_id`, `description`) VALUES ('" . $perfume['name'] . "', '" . $perfume['description'] . "');";
+        //         $check = $pdo->query($query);
+        //         if (!$check) throw new Exception('Unable to populate components table.');
+        //     }
+        // }
+
         foreach (MOCK_COMPONENTS as $component) {
             $checkQuery = "
             SELECT * FROM components WHERE name='$component';
