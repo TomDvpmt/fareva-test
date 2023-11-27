@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\controllers\HomeController;
-use App\Router;
 
 /* Definitions */
 
@@ -20,7 +18,21 @@ if (DEVELOPMENT) {
 /* Autoloading */
 require_once '../vendor/autoload.php';
 
+/* Environment variables */
+
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable("..");
+$dotenv->load();
+
 
 /* Launch App */
+
+use App\Database;
+use App\Router;
+
+$database = new Database;
+$database->initialize();
+
 $router = new Router;
 $router->callController();
