@@ -9,7 +9,7 @@ class Database
 {
     public function initialize(): void
     {
-        $pdo = $this->connect();
+        $pdo = $this->connect(false);
         try {
             $this->createDb($pdo);
             $this->createTables();
@@ -18,7 +18,7 @@ class Database
         }
     }
 
-    public static function connect(bool $withDbName = false): PDO
+    public static function connect(bool $withDbName): PDO
     {
         $dbName = $withDbName ? ';dbname=' . $_ENV['DB_NAME'] : '';
         $dsn = 'mysql:host=' . $_ENV['DB_HOST'] . $dbName;

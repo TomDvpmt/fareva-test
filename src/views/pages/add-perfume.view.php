@@ -1,18 +1,24 @@
 <?php
 
 $title = 'Add a perfume';
+$name = $data['name'] ?? null;
+$description = $data['description'] ?? null;
+$successMessage = $data['successMessage'] ?? null;
+$errorMessage = $data['errorMessage'] ?? null;
 
 ob_start(); ?>
 <h1><?= $title ?></h1>
+<?php echo $successMessage ? '<p class="alert alert-success">' . $successMessage . '</p>' : null ?>
+<?php echo $errorMessage ? '<p class="alert alert-danger">' . $errorMessage . '</p>' : null ?>
 <form method="POST">
     <div class="mb-3">
         <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" id="name" aria-describedby="emailHelp">
+        <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" value="<?= $name ?>">
         <div id="nameHelp" class="form-text">Max. 100 characters</div>
     </div>
     <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <input type="text" class="form-control" id="description">
+        <input type="text" class="form-control" id="description" name="description" value="<?= $description ?>">
         <div id="descriptionHelp" class="form-text">Max. 500 characters</div>
     </div>
     <!-- <div class="mb-3">
