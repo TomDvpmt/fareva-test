@@ -52,12 +52,36 @@ class Database
             "
             CREATE TABLE IF NOT EXISTS components (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(100) NOT NULL,
+                name VARCHAR(100) NOT NULL
+            );
+            ",
+            "
+            CREATE TABLE IF NOT EXISTS perfumes_components (
                 perfume_id INT NOT NULL,
-                FOREIGN KEY (perfume_id) REFERENCES perfumes(id)
+                component_id INT NOT NULL,
+                FOREIGN KEY (perfume_id) REFERENCES perfumes(id),
+                FOREIGN KEY (component_id) REFERENCES components(id)
             );
             "
         ];
+
+        /* Populate with components with mock data */
+
+        $components = [
+            'alcohol',
+            'water',
+            'limonene',
+            'citral',
+            'CI 14700 (RED)',
+            'CI 19140 (YELLOW)',
+            'polysorbate 20',
+            'sodium benzoate',
+        ];
+
+        foreach ($components as $component) {
+            $query = "INSERT INTO components (`name`) VALUES ('" . $component . "');";
+            array_push($queries, $query);
+        }
 
         foreach ($queries as $query) {
             $check = $pdo->query($query);

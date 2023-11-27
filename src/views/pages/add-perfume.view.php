@@ -12,6 +12,16 @@ ob_start(); ?>
 <?php echo $errorMessage ? '<p class="alert alert-danger">' . $errorMessage . '</p>' : null ?>
 <form method="POST">
     <div class="mb-3">
+        <label class="form-label">Gender</label>
+        <div class="input-group">
+            <select class="form-select" aria-label="Gender select" name="gender" id="gender">
+                <option value="0">All</option>
+                <option value="1">Men</option>
+                <option value="2">Women</option>
+            </select>
+        </div>
+    </div>
+    <div class="mb-3">
         <label for="name" class="form-label">Name</label>
         <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" value="<?= $name ?>">
         <div id="nameHelp" class="form-text">Max. 100 characters</div>
@@ -21,13 +31,13 @@ ob_start(); ?>
         <input type="text" class="form-control" id="description" name="description" value="<?= $description ?>">
         <div id="descriptionHelp" class="form-text">Max. 500 characters</div>
     </div>
-    <!-- <div class="mb-3">
+    <div class="mb-3">
         <label class="form-label">Components</label>
         <div class="input-group">
             <input type="checkbox" class="form-check-input" id="exampleCheck1">
             <label class="form-check-label" for="exampleCheck1">TODO COMPONENTS</label>
         </div>
-    </div> -->
+    </div>
 
     <button type="submit" class="btn btn-primary">Add</button>
 </form>
