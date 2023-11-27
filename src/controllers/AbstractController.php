@@ -4,8 +4,8 @@ namespace App\controllers;
 
 class AbstractController
 {
-    public function view(): void
+    public function view(string $name): void
     {
-        require_once VIEWS_DIR . 'pages/home.view.php';
+        require_once VIEWS_DIR . $name . '.view.php';
     }
 }

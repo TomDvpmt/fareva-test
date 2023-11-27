@@ -1,4 +1,4 @@
 <footer class="footer">
-    <div><?= BRAND_NAME ?></div>
+    <a href="<?= SITE_URL ?>"><?= BRAND_NAME ?></a>
     <p>Awesome footer</p>
 </footer>

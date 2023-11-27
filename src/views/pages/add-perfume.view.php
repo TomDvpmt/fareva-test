@@ -1,12 +1,10 @@
 <?php
 
-$title = 'Our perfumes';
+$title = 'Add a perfume';
 
 ob_start(); ?>
-
 <h1><?= $title ?></h1>
-<p>list</p>
-
+<form action="">TODO</form>
 <?php $content = ob_get_clean();
 
 require_once VIEWS_DIR . 'layout.php';

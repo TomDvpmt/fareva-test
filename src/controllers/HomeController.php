@@ -6,6 +6,6 @@ class HomeController extends AbstractController
 {
     public function index(): void
     {
-        $this->view();
+        $this->view('pages/home');
     }
 }

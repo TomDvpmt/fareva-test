@@ -3,6 +3,7 @@
 namespace App;
 
 use App\controllers\HomeController;
+use App\controllers\PerfumeController;
 
 class Router
 {
@@ -14,6 +15,11 @@ class Router
             case '':
             case '/':
                 $controller = new HomeController;
+                $controller->index();
+                break;
+
+            case '/add-perfume':
+                $controller = new PerfumeController;
                 $controller->index();
                 break;
 
