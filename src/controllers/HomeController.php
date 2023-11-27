@@ -2,10 +2,15 @@
 
 namespace App\controllers;
 
+use App\models\Perfume;
+
 class HomeController extends AbstractController
 {
     public function index(): void
     {
-        $this->view('pages/home');
+        $perfumes = (new Perfume)->get();
+
+
+        $this->view('pages/home', $perfumes);
     }
 }

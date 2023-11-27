@@ -20,6 +20,7 @@ class PerfumeController extends AbstractController
         $alreadyExists = $perfume->get(['name' => $name]);
         if ($alreadyExists) {
             $this->view('pages/add-perfume', ['errorMessage' => 'A perfume with this name already exists.', 'name' => $name, 'description' => $description]);
+            return;
         }
         $perfume->save(['name' => $name, 'description' => $description]);
         $this->view('pages/add-perfume', ['successMessage' => 'Perfume added.']);

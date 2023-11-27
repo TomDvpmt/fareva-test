@@ -15,7 +15,6 @@
     <main class="container">
         <?= $content ?? null ?>
     </main>
-    <?php require_once VIEWS_DIR . 'partials/footer.php'; ?>
 </body>
 
 </html>
