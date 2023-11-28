@@ -67,7 +67,7 @@ ob_start(); ?>
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Apply filters</button>
+        <button type="submit" class="btn btn-primary mt-3">Apply filters</button>
     </form>
 </div>
 <div class="perfumes">

@@ -2,8 +2,59 @@
 
 namespace App;
 
+use App\models\Perfume;
 use Exception;
 use PDO;
+
+define('MOCK_COMPONENTS', [
+    'alcohol',
+    'water',
+    'limonene',
+    'citral',
+    'CI 14700 (red)',
+    'CI 19140 (yellow)',
+    'polysorbate 20',
+    'sodium benzoate',
+]);
+
+define('MOCK_PERFUMES', [
+    [
+        'id' => 1,
+        'name' => 'Perfume 1',
+        'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque metus turpis, tempus a molestie non, molestie at enim. In dignissim lectus nec sapien pellentesque, nec condimentum purus lacinia. Aliquam erat volutpat. Quisque non blandit nibh, nec bibendum ipsum. Aenean dignissim tincidunt lorem, suscipit luctus urna ullamcorper non.',
+        'gender' => 1,
+        'components' => [
+            'alcohol',
+            'water',
+            'CI 14700 (red)',
+        ]
+    ],
+    [
+        'id' => 2,
+        'name' => 'Perfume 2',
+        'description' => 'Nulla cursus arcu dolor, a tincidunt est dapibus nec. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur ut placerat arcu, in ultricies orci. Maecenas vel nisl quis sem imperdiet pellentesque ut in quam. Sed sagittis elementum luctus. Suspendisse sodales felis magna.',
+        'gender' => 2,
+        'components' => [
+            'alcohol',
+            'water',
+            'polysorbate 20',
+            'sodium benzoate',
+        ]
+    ],
+    [
+        'id' => 3,
+        'name' => 'Perfume 3',
+        'description' => 'Mauris nulla dui, rutrum quis pretium eu, tincidunt quis arcu. Pellentesque velit ipsum, lacinia quis sapien vel, vulputate tristique nunc. Nulla pellentesque, justo vel pellentesque efficitur, urna massa maximus nisi, in elementum odio quam et libero. Cras accumsan a ex sit amet ornare.',
+        'gender' => 2,
+        'components' => [
+            'alcohol',
+            'limonene',
+            'citral',
+            'sodium benzoate',
+        ]
+    ]
+
+]);
 
 class Database
 {
@@ -13,6 +64,7 @@ class Database
         try {
             $this->createDb($pdo);
             $this->createTables();
+            $this->populateWithMockData();
         } catch (Exception $e) {
             die('Error: ' . $e->getMessage()); // TODO : better error display for user
         }
@@ -78,30 +130,13 @@ class Database
             $check = $pdo->query($query);
             if (!$check) throw new Exception('Unable to create tables.');
         };
+    }
 
+    private function populateWithMockData()
+    {
+        $pdo = $this->connect(true);
 
-        /* Populate with mock data */
-
-        // foreach (MOCK_PERFUMES as $perfume) {
-        //     $checkQuery = "
-        //     SELECT * FROM perfumes WHERE name='" . $perfume['name'] . "';
-        //     ";
-        //     $statement = $pdo->query($checkQuery);
-        //     $result = $statement->fetch();
-        //     if ($result) {
-        //         continue;
-        //     }
-        //     $query = "INSERT INTO perfumes (`name`, `description`) VALUES ('" . $perfume['name'] . "', '" . $perfume['description'] . "');";
-        //     $check = $pdo->query($query);
-        //     if (!$check) throw new Exception('Unable to populate components table.');
-
-        //     foreach ($perfume['components'] as $component) {
-        //         $query = "INSERT INTO perfumes_components (`perfume_id`, `description`) VALUES ('" . $perfume['name'] . "', '" . $perfume['description'] . "');";
-        //         $check = $pdo->query($query);
-        //         if (!$check) throw new Exception('Unable to populate components table.');
-        //     }
-        // }
-
+        // Populate components
         foreach (MOCK_COMPONENTS as $component) {
             $checkQuery = "
             SELECT * FROM components WHERE name='$component';
@@ -114,6 +149,34 @@ class Database
             $query = "INSERT INTO components (`name`) VALUES ('" . $component . "');";
             $check = $pdo->query($query);
             if (!$check) throw new Exception('Unable to populate components table.');
+        }
+
+        // Populate perfumes
+        foreach (MOCK_PERFUMES as $perfume) {
+            $checkQuery = "
+            SELECT * FROM perfumes WHERE name='" . $perfume['name'] . "';
+            ";
+            $statement = $pdo->query($checkQuery);
+            $result = $statement->fetch();
+            if ($result) {
+                continue;
+            }
+            $values = implode("', '", [$perfume['name'], $perfume['description'], $perfume['gender']]);
+            $query = "INSERT INTO perfumes (`name`, `description`, `gender`) VALUES ('$values');";
+            $check = $pdo->query($query);
+            if (!$check) throw new Exception('Unable to populate perfumes table.');
+        }
+
+        // Populate perfumes_components
+        foreach (MOCK_PERFUMES as $perfume) {
+            foreach ($perfume['components'] as $component) {
+                $query = "SELECT id FROM components WHERE name = '$component';";
+                $componentId = $pdo->query($query)->fetch(PDO::FETCH_ASSOC)['id'];
+                $values = implode("', '", [$perfume['id'], $componentId]);
+                $query = "INSERT INTO perfumes_components (`perfume_id`, `component_id`) VALUES ('$values');";
+                $check = $pdo->query($query);
+                if (!$check) throw new Exception('Unable to populate perfumes_components table.');
+            }
         }
     }
 }
