@@ -11,7 +11,7 @@ ob_start(); ?>
 <div>
     <h1><?= $title ?></h1>
     <div class="container">
-        <p class="description"><?= $data['description'] ?></p>
+        <div class="description"><span><strong>Description: </strong> </span><?= $data['description'] ?></div>
         <div class="components-list">
             <span><strong>Components: </strong> </span><span><?= $components ?></span>
         </div>

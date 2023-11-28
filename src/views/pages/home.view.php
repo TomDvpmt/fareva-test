@@ -42,21 +42,26 @@ ob_start(); ?>
 <h1><?= $title ?></h1>
 <?php echo $successMessage ? '<p class="alert alert-success">' . $successMessage . '</p>' : null ?>
 <?php echo $errorMessage ? '<p class="alert alert-danger">' . $errorMessage . '</p>' : null ?>
-<div class="filters">
-    <form method="GET">
+<div>
+    <h2>Filters</h2>
+    <form method="GET" class="filters">
         <div class="row">
             <div class="col">
-                <label class="form-label">Gender</label>
+                <label class="form-label">
+                    <h3>Gender</h3>
+                </label>
                 <div class="input-group">
                     <select class="form-select" aria-label="Gender select" name="gender" id="gender">
-                        <option value="0" <?= $_GET['gender'] == 0 ? 'selected' : null ?>>All</option>
-                        <option value="1" <?= $_GET['gender'] == 1 ? 'selected' : null ?>>Men</option>
-                        <option value="2" <?= $_GET['gender'] == 2 ? 'selected' : null ?>>Women</option>
+                        <option value="0" <?= isset($_GET['gender']) && $_GET['gender'] == 0 ? 'selected' : null ?>>All</option>
+                        <option value="1" <?= isset($_GET['gender']) && $_GET['gender'] == 1 ? 'selected' : null ?>>Men</option>
+                        <option value="2" <?= isset($_GET['gender']) && $_GET['gender'] == 2 ? 'selected' : null ?>>Women</option>
                     </select>
                 </div>
             </div>
             <div class="col">
-                <label class="form-label">Components</label>
+                <label class="form-label">
+                    <h3>Components</h3>
+                </label>
                 <div class="input-group components-checkboxes">
                     <?= implode('', $componentCheckboxes) ?>
                 </div>
@@ -66,6 +71,7 @@ ob_start(); ?>
     </form>
 </div>
 <div class="perfumes">
+    <h2>Perfumes</h2>
     <table class="table table-hover">
         <thead>
             <tr>

@@ -18,8 +18,18 @@ class PerfumeController extends AbstractController
         }
 
         $id = strip_tags($_GET['id']);
-        $perfume = (new Perfume)->get(['id' => $id])[0];
-        $this->view('pages/perfume', $perfume);
+        $perfume = new Perfume;
+        $result = $perfume->get(['id' => $id]);
+
+        if (!$result) header('Location: /');
+
+        $data = $result[0];
+        $components = $perfume->getComponents($id);
+        $componentNames = [];
+        foreach ($components as $key => $value) {
+            array_push($componentNames, $value['name']);
+        };
+        $this->view('pages/perfume', [...$data, ...['components' => $componentNames]]);
     }
 
     public function addPerfume(): void

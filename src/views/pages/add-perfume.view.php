@@ -35,8 +35,6 @@ ob_start(); ?>
         <label class="form-label">Components</label>
         <div class="input-group">
             <?= $componentsOptions ?>
-            <!-- <input type="checkbox" class="form-check-input" id="TODO" name="components[]" value="TODO">
-            <label class="form-check-label" for="TODO">TODO COMPONENTS</label> -->
         </div>
     </div>
 
