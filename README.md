@@ -42,3 +42,7 @@ DB_PASSWORD = <your user's password>
 ```
 
 (if the .env file doesn't exist, create it.)
+
+# Version control
+
+This project's repository can be found here : [https://github.com/TomDvpmt/fareva-test](https://github.com/TomDvpmt/fareva-test)
