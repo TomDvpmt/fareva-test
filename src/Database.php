@@ -138,6 +138,8 @@ class Database
 
         // Populate components
         foreach (MOCK_COMPONENTS as $component) {
+
+            // check if entry already exsists
             $checkQuery = "
             SELECT * FROM components WHERE name='$component';
             ";
@@ -146,6 +148,8 @@ class Database
             if ($result) {
                 continue;
             }
+
+            // write in db
             $query = "INSERT INTO components (`name`) VALUES ('" . $component . "');";
             $check = $pdo->query($query);
             if (!$check) throw new Exception('Unable to populate components table.');
@@ -153,6 +157,8 @@ class Database
 
         // Populate perfumes
         foreach (MOCK_PERFUMES as $perfume) {
+
+            // check if entry already exsists
             $checkQuery = "
             SELECT * FROM perfumes WHERE name='" . $perfume['name'] . "';
             ";
@@ -161,6 +167,8 @@ class Database
             if ($result) {
                 continue;
             }
+
+            // write in db
             $values = implode("', '", [$perfume['name'], $perfume['description'], $perfume['gender']]);
             $query = "INSERT INTO perfumes (`name`, `description`, `gender`) VALUES ('$values');";
             $check = $pdo->query($query);
@@ -169,10 +177,25 @@ class Database
 
         // Populate perfumes_components
         foreach (MOCK_PERFUMES as $perfume) {
+            $perfumeId = $perfume['id'];
             foreach ($perfume['components'] as $component) {
+
+                // get component id
                 $query = "SELECT id FROM components WHERE name = '$component';";
                 $componentId = $pdo->query($query)->fetch(PDO::FETCH_ASSOC)['id'];
-                $values = implode("', '", [$perfume['id'], $componentId]);
+
+                // check if relation already exsists
+                $checkQuery = "
+                SELECT * FROM perfumes_components WHERE component_id = $componentId AND perfume_id = $perfumeId;
+                ";
+                $statement = $pdo->query($checkQuery);
+                $result = $statement->fetch();
+                if ($result) {
+                    continue;
+                }
+
+                // write in db
+                $values = implode("', '", [$perfumeId, $componentId]);
                 $query = "INSERT INTO perfumes_components (`perfume_id`, `component_id`) VALUES ('$values');";
                 $check = $pdo->query($query);
                 if (!$check) throw new Exception('Unable to populate perfumes_components table.');
