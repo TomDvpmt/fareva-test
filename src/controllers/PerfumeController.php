@@ -88,6 +88,7 @@ class PerfumeController extends AbstractController
     {
         $id = strip_tags($_GET['id']);
         $perfume = new Perfume;
+        $perfume->setTable('perfumes');
         $perfume->delete($id);
         header('Location: /');
     }

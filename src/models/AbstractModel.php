@@ -11,7 +11,7 @@ class AbstractModel
     protected string $table;
     protected string $where;
 
-    protected function setTable(string $table): void
+    public function setTable(string $table): void
     {
         $this->table = $table;
     }

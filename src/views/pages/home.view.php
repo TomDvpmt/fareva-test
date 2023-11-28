@@ -32,7 +32,7 @@ foreach ($data['perfumes'] as $perfume) {
                 <td id="gender">' . $gender . '</td>
                 <td id="description">' . $perfume['description'] . '</td>
                 <td id="components">' . $components . '</td>
-                <td><a href="/perfume?id=' . $perfume['id'] . '">See detail</a> <a href="/delete?id=' . $perfume['id'] . '">Delete</a></td>
+                <td><a class="btn btn-primary mb-3" role="button" href="/perfume?id=' . $perfume['id'] . '">See detail</a> <a class="btn btn-danger mb-3" role="button" href="/delete?id=' . $perfume['id'] . '">Delete</a></td>
         </tr>
     ';
     array_push($rows, $row);

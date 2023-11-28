@@ -19,7 +19,7 @@ define('MOCK_COMPONENTS', [
 
 define('MOCK_PERFUMES', [
     [
-        'id' => 1,
+
         'name' => 'Perfume 1',
         'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque metus turpis, tempus a molestie non, molestie at enim. In dignissim lectus nec sapien pellentesque, nec condimentum purus lacinia. Aliquam erat volutpat. Quisque non blandit nibh, nec bibendum ipsum. Aenean dignissim tincidunt lorem, suscipit luctus urna ullamcorper non.',
         'gender' => 1,
@@ -30,7 +30,7 @@ define('MOCK_PERFUMES', [
         ]
     ],
     [
-        'id' => 2,
+
         'name' => 'Perfume 2',
         'description' => 'Nulla cursus arcu dolor, a tincidunt est dapibus nec. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur ut placerat arcu, in ultricies orci. Maecenas vel nisl quis sem imperdiet pellentesque ut in quam. Sed sagittis elementum luctus. Suspendisse sodales felis magna.',
         'gender' => 2,
@@ -42,7 +42,7 @@ define('MOCK_PERFUMES', [
         ]
     ],
     [
-        'id' => 3,
+
         'name' => 'Perfume 3',
         'description' => 'Mauris nulla dui, rutrum quis pretium eu, tincidunt quis arcu. Pellentesque velit ipsum, lacinia quis sapien vel, vulputate tristique nunc. Nulla pellentesque, justo vel pellentesque efficitur, urna massa maximus nisi, in elementum odio quam et libero. Cras accumsan a ex sit amet ornare.',
         'gender' => 2,
@@ -112,16 +112,17 @@ class Database
             CREATE TABLE IF NOT EXISTS perfumes_components (
                 perfume_id INT NOT NULL,
                 component_id INT NOT NULL,
-                FOREIGN KEY (perfume_id) REFERENCES perfumes(id),
+                PRIMARY KEY (perfume_id, component_id),
+                FOREIGN KEY (perfume_id) REFERENCES perfumes(id) ON DELETE CASCADE,
                 FOREIGN KEY (component_id) REFERENCES components(id)
             );
             ",
             "
             CREATE TRIGGER IF NOT EXISTS delete_relation_before_delete_perfume
-                BEFORE DELETE 
-                ON perfumes FOR EACH ROW
-                DELETE FROM perfumes_components
-                WHERE perfume_id = old.id;
+            BEFORE DELETE 
+            ON perfumes FOR EACH ROW
+            DELETE FROM perfumes_components
+            WHERE perfume_id = OLD.id;
             "
         ];
 
@@ -134,72 +135,20 @@ class Database
 
     private function populateWithMockData()
     {
-        $pdo = $this->connect(true);
+        if (!$_SESSION['populated']) {
+            foreach (MOCK_PERFUMES as $perfume) {
+                $perfumeData = ['name' => $perfume['name'], 'description' => $perfume['description'], 'gender' => $perfume['gender']];
+                $newPerfume = new Perfume;
+                if ($newPerfume->get(['name' => $perfume['name']])) continue;
+                $newPerfume->save($perfumeData);
 
-        // Populate components
-        foreach (MOCK_COMPONENTS as $component) {
-
-            // check if entry already exsists
-            $checkQuery = "
-            SELECT * FROM components WHERE name='$component';
-            ";
-            $statement = $pdo->query($checkQuery);
-            $result = $statement->fetch();
-            if ($result) {
-                continue;
+                /* Add components */
+                $perfumeId = $newPerfume->get(['name' => $perfume['name']])[0]['id'];
+                $newPerfume->setId($perfumeId);
+                $newPerfume->addComponentsToPerfume($perfume['components']);
             }
 
-            // write in db
-            $query = "INSERT INTO components (`name`) VALUES ('" . $component . "');";
-            $check = $pdo->query($query);
-            if (!$check) throw new Exception('Unable to populate components table.');
-        }
-
-        // Populate perfumes
-        foreach (MOCK_PERFUMES as $perfume) {
-
-            // check if entry already exsists
-            $checkQuery = "
-            SELECT * FROM perfumes WHERE name='" . $perfume['name'] . "';
-            ";
-            $statement = $pdo->query($checkQuery);
-            $result = $statement->fetch();
-            if ($result) {
-                continue;
-            }
-
-            // write in db
-            $values = implode("', '", [$perfume['name'], $perfume['description'], $perfume['gender']]);
-            $query = "INSERT INTO perfumes (`name`, `description`, `gender`) VALUES ('$values');";
-            $check = $pdo->query($query);
-            if (!$check) throw new Exception('Unable to populate perfumes table.');
-        }
-
-        // Populate perfumes_components
-        foreach (MOCK_PERFUMES as $perfume) {
-            $perfumeId = $perfume['id'];
-            foreach ($perfume['components'] as $component) {
-
-                // get component id
-                $query = "SELECT id FROM components WHERE name = '$component';";
-                $componentId = $pdo->query($query)->fetch(PDO::FETCH_ASSOC)['id'];
-
-                // check if relation already exsists
-                $checkQuery = "
-                SELECT * FROM perfumes_components WHERE component_id = $componentId AND perfume_id = $perfumeId;
-                ";
-                $statement = $pdo->query($checkQuery);
-                $result = $statement->fetch();
-                if ($result) {
-                    continue;
-                }
-
-                // write in db
-                $values = implode("', '", [$perfumeId, $componentId]);
-                $query = "INSERT INTO perfumes_components (`perfume_id`, `component_id`) VALUES ('$values');";
-                $check = $pdo->query($query);
-                if (!$check) throw new Exception('Unable to populate perfumes_components table.');
-            }
+            $_SESSION['populated'] = true;
         }
     }
 }
