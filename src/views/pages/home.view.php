@@ -27,7 +27,7 @@ foreach ($data['perfumes'] as $perfume) {
     $components = implode(', ', $perfume['components']);
     $gender = $perfume['gender'] === 1 ? 'men' : 'women';
     $row = '
-        <tr id="' . $perfume['id'] . '">
+        <tr id="' . $perfume['id'] . '" class="perfume-row">
                 <td id="name">' . $perfume['name'] .  '</td>
                 <td id="gender">' . $gender . '</td>
                 <td id="description">' . $perfume['description'] . '</td>
@@ -42,7 +42,7 @@ ob_start(); ?>
 <h1><?= $title ?></h1>
 <?php echo $successMessage ? '<p class="alert alert-success">' . $successMessage . '</p>' : null ?>
 <?php echo $errorMessage ? '<p class="alert alert-danger">' . $errorMessage . '</p>' : null ?>
-<div>
+<div id="filters">
     <h2>Filters</h2>
     <form method="GET" class="filters">
         <div class="row">
@@ -72,7 +72,7 @@ ob_start(); ?>
 </div>
 <div class="perfumes">
     <h2>Perfumes</h2>
-    <table class="table table-hover">
+    <table class="table" id="perfumes-table">
         <thead>
             <tr>
                 <th scope="col">Name</th>
